@@ -13,7 +13,7 @@ const db = new sqlite3.Database('students-db', (err) => {
                 rga TEXT UNIQUE,
                 nome TEXT NOT NULL, 
                 curso TEXT,
-                situacao TEXT,
+                situacao TEXT DEFAULT 'ativo',
                 registrado_em DATETIME
             )`
     )
