@@ -1,7 +1,6 @@
 const express = require('express')
 const app = express()
 const port = 8000
-const routes = require('./routes')
 
 app.get('/', (req, res) => {
   res.send('Student API')
@@ -12,25 +11,25 @@ app.listen(port, () => {
 })
 
 app.get('/alunos', () => {
-  //TODO
+  // TODO
 })
 
 app.post('/alunos', () => {
-  //TODO
+  // TODO
 })
 
 app.get('/alunos/id', () => {
-  //TODO
+  // TODO
 })
 
 app.put('/alunos/id', () => {
-  //TODO
+  // TODO
 })
 
 app.delete('/alunos/id', () => {
-  //TODO
+  // TODO
 })
 
 app.get('/alunos', () => {
-  //TODO
+  // TODO
 })
