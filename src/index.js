@@ -10,3 +10,27 @@ app.get('/', (req, res) => {
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
 })
+
+app.get('/alunos', () => {
+  //TODO
+})
+
+app.post('/alunos', () => {
+  //TODO
+})
+
+app.get('/alunos/id', () => {
+  //TODO
+})
+
+app.put('/alunos/id', () => {
+  //TODO
+})
+
+app.delete('/alunos/id', () => {
+  //TODO
+})
+
+app.get('/alunos', () => {
+  //TODO
+})
