@@ -1,6 +1,8 @@
+
 const express = require('express')
 const bodyParser = require('body-parser')
 const db = require('./Database')
+
 const app = express()
 const port = 8080
 
@@ -19,9 +21,9 @@ app.get('/alunos', () => {
 })
 
 app.post('/alunos', (req, res) => {
-  var date = new Date()
+  const date = new Date()
 
-  var data = {
+  const data = {
     nome: req.body.nome,
     rga: req.body.rga,
     curso: req.body.curso,
@@ -29,7 +31,7 @@ app.post('/alunos', (req, res) => {
     datetime: `${date.toLocaleString()}`
   }
 
-  var regularRGA = RegExp('[0-9]{4}.[0-9]{4}.[0-9]{3}-[0-9]{1}')
+  const regularRGA = RegExp('[0-9]{4}.[0-9]{4}.[0-9]{3}-[0-9]{1}')
 
   if (!regularRGA.test(data.rga)) {
     res.status(400).json({ error: 'RGA inválido.' })
@@ -40,8 +42,8 @@ app.post('/alunos', (req, res) => {
     data.situacao = 'Ativo'
   }
 
-  var query = 'INSERT INTO aluno (rga, nome, curso, situacao, registrado_em) VALUES (?, ? ,? ,? , ?)'
-  var params = [data.rga, data.nome, data.curso, data.situacao, data.datetime]
+  const query = 'INSERT INTO aluno (rga, nome, curso, situacao, registrado_em) VALUES (?, ? ,? ,? , ?)'
+  const params = [data.rga, data.nome, data.curso, data.situacao, data.datetime]
 
   db.run(query, params, function (err) {
     if (err) {
@@ -51,16 +53,15 @@ app.post('/alunos', (req, res) => {
       })
       return
     }
-    res.json(
-      {
-        message: 'Sucesso.',
-        id: this.lastID,
-        rga: data.rga,
-        nome: data.nome,
-        curso: data.curso,
-        situacao: data.situacao,
-        registrado_em: data.datetime
-      })
+    res.json({
+      message: 'Sucesso.',
+      id: this.lastID,
+      rga: data.rga,
+      nome: data.nome,
+      curso: data.curso,
+      situacao: data.situacao,
+      registrado_em: data.datetime
+    })
   })
 })
 
