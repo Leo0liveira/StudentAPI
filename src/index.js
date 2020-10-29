@@ -2,7 +2,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const db = require('./Database')
 const app = express()
-const port = 8000
+const port = 8080
 
 app.use(bodyParser.json())
 
@@ -11,7 +11,7 @@ app.get('/', (req, res) => {
 })
 
 app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`)
+  console.log(`Student API rodando em: http://localhost:${port}`)
 })
 
 app.get('/alunos', () => {
@@ -19,19 +19,14 @@ app.get('/alunos', () => {
 })
 
 app.post('/alunos', (req, res) => {
-
-  // RGA: OK
-  // Nome: OK
-  // Curso: OK
-  // Situacao: DEFAULT QUEBRADO
-  // ID: OK
-  // REGISTRADO_EM: NÃO APARECE
+  var date = new Date()
 
   var data = {
     nome: req.body.nome,
     rga: req.body.rga,
     curso: req.body.curso,
-    situacao: req.body.situacao
+    situacao: req.body.situacao,
+    datetime: `${date.toLocaleString()}`
   }
 
   var regularRGA = RegExp('[0-9]{4}.[0-9]{4}.[0-9]{3}-[0-9]{1}')
@@ -41,12 +36,12 @@ app.post('/alunos', (req, res) => {
     return
   }
 
-  if (data.situacao !== 'Ativo' || data.situacao !== 'Inativo') {
-    data.situacao = ''
+  if (data.situacao != 'Inativo') {
+    data.situacao = 'Ativo'
   }
 
-  var query = 'INSERT INTO aluno (rga, nome, curso, situacao, registrado_em) VALUES (?, ? ,? ,? , Datetime(\'now\',\'localtime\'))'
-  var params = [data.rga, data.nome, data.curso, data.situacao]
+  var query = 'INSERT INTO aluno (rga, nome, curso, situacao, registrado_em) VALUES (?, ? ,? ,? , ?)'
+  var params = [data.rga, data.nome, data.curso, data.situacao, data.datetime]
 
   db.run(query, params, function (err) {
     if (err) {
@@ -63,8 +58,8 @@ app.post('/alunos', (req, res) => {
         rga: data.rga,
         nome: data.nome,
         curso: data.curso,
-        situacao: data.situacao
-        // TO DO: RETORNAR A DATA DE INSERÇÂO
+        situacao: data.situacao,
+        registrado_em: data.datetime
       })
   })
 })

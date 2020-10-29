@@ -1,6 +1,6 @@
 const sqlite3 = require('sqlite3')
 
-const db = new sqlite3.Database('students-db', (err) => {
+const db = new sqlite3.Database('db.sqlite', (err) => {
   if (err) {
     // Não foi possível conectar ao banco de dados
     console.error(err.message)
@@ -8,13 +8,13 @@ const db = new sqlite3.Database('students-db', (err) => {
   } else {
     console.log('Conectado ao banco de dados')
     db.run(`
-            CREATE TABLE student (
-                id TEXT PRIMARY KEY,
-                rga TEXT UNIQUE,
+            CREATE TABLE aluno (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                rga TEXT,
                 nome TEXT NOT NULL, 
                 curso TEXT,
-                situacao TEXT DEFAULT 'ativo',
-                registrado_em DATETIME
+                situacao TEXT NOT NULL DEFAULT 'Ativo',
+                registrado_em TEXT
             )`
     )
   }
