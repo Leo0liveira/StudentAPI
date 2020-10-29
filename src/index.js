@@ -31,7 +31,7 @@ app.post('/alunos', (req, res) => {
     datetime: `${date.toLocaleString()}`
   }
 
-  const regularRGA = RegExp('[0-9]{4}.[0-9]{4}.[0-9]{3}-[0-9]{1}')
+  const regularRGA = RegExp('^[0-9]{4}.[0-9]{4}.[0-9]{3}-[0-9]{1}$')
 
   if (!regularRGA.test(data.rga)) {
     res.status(400).json({ error: 'RGA inválido.' })
@@ -53,7 +53,7 @@ app.post('/alunos', (req, res) => {
       })
       return
     }
-    res.json({
+    res.status(201).json({
       message: 'Sucesso.',
       id: this.lastID,
       rga: data.rga,
