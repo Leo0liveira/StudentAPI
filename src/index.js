@@ -38,7 +38,7 @@ app.post('/alunos', (req, res) => {
     return
   }
 
-  if (data.situacao != 'Inativo') {
+  if (data.situacao !== 'Inativo') {
     data.situacao = 'Ativo'
   }
 
