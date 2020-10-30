@@ -158,9 +158,25 @@ app.put('/alunos/:id?', (req, res) => {
     res.status(200).json({
       message: 'Sucesso',
       data: data
+    })
   })
 })
 
-app.delete('/alunos/id', () => {
-  // TODO
+app.delete('/alunos/:id?', (req, res) => {
+  var alunoId = req.params.id
+  var query = 'DELETE FROM aluno WHERE id = ' + alunoId
+
+  db.all(query, (err, aluno) => {
+    if (err) {
+      res.status(404).json({
+        message: 'Aluno não encontrado.',
+        erro: err.message
+      })
+      return
+    }
+    res.status(200).json({
+      message: 'Sucesso.',
+      data: aluno
+    })
+  })
 })
