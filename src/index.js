@@ -93,20 +93,43 @@ app.post('/alunos', (req, res) => {
   })
 })
 
-app.put('/alunos', () => {
-  // TODO
+app.put('/alunos', (req, res) => {
+  res.status(405).json({
+    message: 'Método não permitido.'
+  })
 })
 
-app.delete('/alunos', () => {
-  // TODO
+app.delete('/alunos', (req, res) => {
+  res.status(405).json({
+    message: 'Método não permitido.'
+  })
 })
 
-app.get('/alunos/id', () => {
-  // TODO
+app.get('/alunos/<id>', (req, res) => {
+  var aluno_id = req.query.id
+
+  var query = 'SELECT * FROM aluno WHERE id =' + aluno_id
+
+  db.get(query, (err, aluno) => {
+    
+    if (err) {
+      res.status(404).json({
+        message: 'Aluno não encontrado.',
+        error: err.message
+      })
+      return
+    }
+
+    res.status(200).json({
+      message: 'Sucesso',
+      data: aluno
+    })
 })
 
-app.post('/alunos/id', () => {
-  // TODO
+app.post('/alunos/id', (req, res) => {
+  res.status(405).json({
+    message: 'Método não permitido.'
+  })
 })
 
 app.put('/alunos/id', () => {
