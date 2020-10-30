@@ -8,9 +8,9 @@ const db = new sqlite3.Database('db.sqlite', (err) => {
   } else {
     console.log('Conectado ao banco de dados')
     db.run(`
-            CREATE TABLE aluno (
+            CREATE TABLE IF NOT EXISTS aluno (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                rga TEXT,
+                rga TEXT UNIQUE NOT NULL,
                 nome TEXT NOT NULL, 
                 curso TEXT,
                 situacao TEXT NOT NULL DEFAULT 'Ativo',

@@ -1,23 +1,56 @@
 
 const express = require('express')
-const bodyParser = require('body-parser')
 const db = require('./Database')
-
+const bodyParser = require('body-parser')
 const app = express()
 const port = 8080
-
-app.use(bodyParser.json())
 
 app.get('/', (req, res) => {
   res.send('Student API')
 })
 
+app.use(bodyParser.json())
+
 app.listen(port, () => {
   console.log(`Student API rodando em: http://localhost:${port}`)
 })
 
-app.get('/alunos', () => {
-  // TODO
+app.get('/alunos', (req, res) => {
+  var limite = req.query.limite
+  var pagina = req.query.pagina
+  var nome = req.query.nome
+
+  var qlimit = ''
+  var qpage = ''
+  var qname = ''
+
+  if (limite) {
+    qlimit = ' LIMIT ' + limite
+  }
+  if (pagina & limite) {
+    qpage = ' OFFSET ' + (limite * (pagina - 1))
+  }
+  if (nome) {
+    qname = ` WHERE nome LIKE '%${nome}%'`
+  }
+
+  var query = 'SELECT * FROM aluno' + qlimit + qpage + qname
+
+  db.all(query, (err, alunos) => {
+    if (err) {
+      res.status(400).json(
+        {
+          message: 'Erro ao recuperar alunos',
+          error: err.message
+        })
+      return
+    }
+
+    res.status(200).json({
+      message: 'Sucesso',
+      data: alunos
+    })
+  })
 })
 
 app.post('/alunos', (req, res) => {
@@ -31,9 +64,9 @@ app.post('/alunos', (req, res) => {
     datetime: `${date.toLocaleString()}`
   }
 
-  const regularRGA = RegExp('^[0-9]{4}.[0-9]{4}.[0-9]{3}-[0-9]{1}$')
+  const regexRGA = RegExp('^[0-9]{4}.[0-9]{4}.[0-9]{3}-[0-9]{1}$')
 
-  if (!regularRGA.test(data.rga)) {
+  if (!regexRGA.test(data.rga)) {
     res.status(400).json({ error: 'RGA inválido.' })
     return
   }
