@@ -144,7 +144,9 @@ app.put('/alunos/:id?', (req, res) => {
     situacao: req.body.situacao,
     datetime: `${date.toLocaleString()}`
   }
-  var query = 'UPDATE aluno SET nome = ?, rga = ?, curso = ?, situacao = ?, datetime = ? WHERE id = ' + alunoId
+  var query =
+    'UPDATE aluno SET nome = ?, rga = ?, curso = ?, situacao = ?, registrado_em = ? WHERE id = ' +
+    alunoId
   var params = [data.nome, data.rga, data.curso, data.situacao, data.datetime]
 
   db.run(query, params, (err) => {
@@ -166,7 +168,7 @@ app.delete('/alunos/:id?', (req, res) => {
   var alunoId = req.params.id
   var query = 'DELETE FROM aluno WHERE id = ' + alunoId
 
-  db.all(query, (err, aluno) => {
+  db.get('SELECT * FROM aluno WHERE id = ?', alunoId, (err, aluno) => {
     if (err) {
       res.status(404).json({
         message: 'Aluno não encontrado.',
@@ -174,9 +176,17 @@ app.delete('/alunos/:id?', (req, res) => {
       })
       return
     }
-    res.status(200).json({
-      message: 'Sucesso.',
-      data: aluno
+    db.run(query, (err) => {
+      if (err) {
+        res.status(404).json({
+          message: 'Aluno não encontrado.',
+          erro: err.message
+        })
+      }
+      res.status(200).json({
+        message: 'Sucesso.',
+        data: aluno
+      })
     })
   })
 })
