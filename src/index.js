@@ -1,13 +1,8 @@
-
 const express = require('express')
 const db = require('./Database')
 const bodyParser = require('body-parser')
 const app = express()
 const port = 8080
-
-app.get('/', (req, res) => {
-  res.send('Student API')
-})
 
 app.use(bodyParser.json())
 
@@ -28,7 +23,7 @@ app.get('/alunos', (req, res) => {
     qlimit = ' LIMIT ' + limite
   }
   if (pagina & limite) {
-    qpage = ' OFFSET ' + (limite * (pagina - 1))
+    qpage = ' OFFSET ' + limite * (pagina - 1)
   }
   if (nome) {
     qname = ` WHERE nome LIKE '%${nome}%'`
@@ -38,11 +33,10 @@ app.get('/alunos', (req, res) => {
 
   db.all(query, (err, alunos) => {
     if (err) {
-      res.status(400).json(
-        {
-          message: 'Erro ao recuperar alunos',
-          error: err.message
-        })
+      res.status(400).json({
+        message: 'Erro ao recuperar alunos',
+        error: err.message
+      })
       return
     }
 
@@ -75,7 +69,8 @@ app.post('/alunos', (req, res) => {
     data.situacao = 'Ativo'
   }
 
-  const query = 'INSERT INTO aluno (rga, nome, curso, situacao, registrado_em) VALUES (?, ? ,? ,? , ?)'
+  const query =
+    'INSERT INTO aluno (rga, nome, curso, situacao, registrado_em) VALUES (?, ? ,? ,? , ?)'
   const params = [data.rga, data.nome, data.curso, data.situacao, data.datetime]
 
   db.run(query, params, function (err) {
@@ -98,7 +93,19 @@ app.post('/alunos', (req, res) => {
   })
 })
 
+app.put('/alunos', () => {
+  // TODO
+})
+
+app.delete('/alunos', () => {
+  // TODO
+})
+
 app.get('/alunos/id', () => {
+  // TODO
+})
+
+app.post('/alunos/id', () => {
   // TODO
 })
 
@@ -107,9 +114,5 @@ app.put('/alunos/id', () => {
 })
 
 app.delete('/alunos/id', () => {
-  // TODO
-})
-
-app.get('/alunos', () => {
   // TODO
 })
